@@ -11,6 +11,6 @@
     "sqlite3": "^5.1.7",
     "bcryptjs": "^2.4.3"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Prachi Garg",
+  "license": "UNLICENSED"
 }

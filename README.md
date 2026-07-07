@@ -87,4 +87,10 @@ PromptCraft AI uses structured formats inspired by **CO-STAR**:
 * **Format**: Structure requirements.
 
 ---
+
+## 📄 License
+
+Proprietary License. All rights reserved by Prachi Garg. Unauthorized copying, distribution, modification, or commercial exploitation of this Software or any of its files is strictly prohibited. Refer to the [LICENSE](LICENSE) file for the full terms.
+
+---
 *Made with 💜 by Prachi Garg.*
