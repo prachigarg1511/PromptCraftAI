@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PromptCraft AI - The ultimate prompt engineering chatbot to craft high-performing prompts for Midjourney, DALL-E, ChatGPT, and Gemini.">
+    <title>PromptCraft AI | Expert Prompt Engineering Chatbot</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // AUTH GUARD — redirect to auth if not logged in
+        (function() {
+            const session = localStorage.getItem('promptcraft_session');
+            if (!session) {
+                window.location.href = 'auth.html';
+            }
+        })();
+    </script>
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar Section -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-grad-1)"/>
+                        <path d="M2 17L12 22L22 17" stroke="url(#logo-grad-2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="url(#logo-grad-1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logo-grad-1" x1="2" y1="2" x2="22" y2="12" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#a855f7"/>
+                                <stop offset="1" stop-color="#06b6d4"/>
+                            </linearGradient>
+                            <linearGradient id="logo-grad-2" x1="2" y1="12" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#a855f7"/>
+                                <stop offset="1" stop-color="#3b82f6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                        <span>PromptCraft <span class="accent-text">AI</span></span>
+                    </div>
+                    <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500; margin-top: 4px; padding-left: 38px; line-height: 1; width: 100%;">Made by Prachi Garg</div>
+                <button class="mobile-close" id="mobile-close-btn" aria-label="Close sidebar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <button class="new-chat-btn" id="new-chat-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                New Prompt Session
+            </button>
+
+            <!-- Scrollable Sidebar Content -->
+            <div class="sidebar-scrollable">
+                <!-- Mode Selector Shortcuts -->
+                <div class="sidebar-section">
+                    <h3 class="section-title">Prompt Blueprints</h3>
+                    <div class="blueprint-list">
+                        <button class="blueprint-item active" data-mode="text" id="blueprint-text">
+                            <span class="icon">✍️</span>
+                            <div class="blueprint-info">
+                                <span class="title">General & Text</span>
+                                <span class="desc">Role, Context, Constraints</span>
+                            </div>
+                        </button>
+                        <button class="blueprint-item" data-mode="image" id="blueprint-image">
+                            <span class="icon">🎨</span>
+                            <div class="blueprint-info">
+                                <span class="title">Image Generation</span>
+                                <span class="desc">Midjourney, DALL-E, Stable</span>
+                            </div>
+                        </button>
+                        <button class="blueprint-item" data-mode="code" id="blueprint-code">
+                            <span class="icon">💻</span>
+                            <div class="blueprint-info">
+                                <span class="title">Coding & Technical</span>
+                                <span class="desc">Refactor, Debug, API design</span>
+                            </div>
+                        </button>
+                        <button class="blueprint-item" data-mode="expert" id="blueprint-expert">
+                            <span class="icon">🎯</span>
+                            <div class="blueprint-info">
+                                <span class="title">Expert Mode (Quick)</span>
+                                <span class="desc">Compile prompts in one go</span>
+                            </div>
+                        </button>
+                        <button class="blueprint-item" data-mode="codetoprompt" id="blueprint-codetoprompt">
+                            <span class="icon">⚡</span>
+                            <div class="blueprint-info">
+                                <span class="title">Code-to-Prompt</span>
+                                <span class="desc">Translate code to developer prompt</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mega-Prompt Preset Hub -->
+                <div class="sidebar-section">
+                    <h3 class="section-title">Mega-Prompt Presets</h3>
+                    <div class="preset-list" id="preset-list">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+                </div>
+
+                <!-- Saved Prompts History -->
+                <div class="sidebar-section history-section">
+                    <h3 class="section-title">Saved Prompts</h3>
+                    <div class="history-list" id="history-list">
+                        <div class="empty-history">No saved prompts yet</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Settings (Gemini API Configuration) -->
+            <div class="sidebar-footer">
+                <button class="settings-toggle-btn" id="settings-toggle-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Settings & API Key
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Chat and Workspace Section -->
+        <main class="main-content">
+            <!-- Header Bar -->
+            <header class="app-header">
+                <button class="menu-toggle" id="menu-toggle-btn" aria-label="Toggle sidebar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <div class="header-title">
+                    <h2 id="current-mode-title">✍️ General Prompt Builder</h2>
+                    <p class="subtitle" id="current-mode-subtitle">Perfecting role, context, and structural criteria step-by-step.</p>
+                </div>
+                <div class="header-actions">
+                    <div class="user-pill" id="user-pill">
+                        <div class="user-avatar-sm">👤</div>
+                        <span class="user-name-sm" id="header-username">User</span>
+                    </div>
+                    <button class="preview-toggle-btn" id="preview-toggle-btn" aria-label="Toggle Live Preview">
+                        <span class="preview-mobile-text">Show Preview</span>
+                        <svg class="preview-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                    <button class="logout-btn" id="logout-btn" title="Logout">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Logout
+                    </button>
+                </div>
+            </header>
+
+            <div class="workspace-grid">
+                <!-- Left Panel Slot: Chat OR Code Optimizer (toggles) -->
+                <div class="left-panel-slot">
+                <!-- Chat Window Column -->
+                <section class="chat-container">
+                    <!-- Chat Message Area -->
+                    <div class="chat-messages" id="chat-messages">
+                        <!-- Bot Message -->
+                        <div class="message bot-message">
+                            <div class="bot-avatar">🤖</div>
+                            <div class="message-content">
+                                <p>Welcome to <strong>PromptCraft AI</strong>! I am your Prompt Engineer chatbot.</p>
+                                <p>I will guide you step-by-step to compile the ultimate prompt using top-tier prompt methodologies.</p>
+                                <p>First, what <strong>Role or Persona</strong> should the AI adopt? (e.g., Senior Copywriter, Expert Python Developer, Fitness Coach, Creative Designer)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Suggestion Chips / Quick Inputs -->
+                    <div class="suggestion-chips-container">
+                        <span class="chips-label">Quick Suggestions:</span>
+                        <div class="suggestion-chips" id="suggestion-chips">
+                            <!-- Dynamically updated by app.js -->
+                            <button class="chip-btn">Senior Python Dev</button>
+                            <button class="chip-btn">Copywriter</button>
+                            <button class="chip-btn">UI/UX Consultant</button>
+                            <button class="chip-btn">Data Scientist</button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input Controls -->
+                    <div class="chat-input-area">
+                        <div class="input-actions">
+                            <span class="flow-step-indicator" id="step-indicator">Step 1 of 5: Role</span>
+                            <button class="reset-flow-btn" id="reset-flow-btn" title="Restart prompt building flow">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                                Start Over
+                            </button>
+                        </div>
+                        <form class="input-form" id="chat-input-form">
+                            <textarea 
+                                class="chat-input" 
+                                id="chat-input-field" 
+                                placeholder="Type the persona/role or select a suggestion above..." 
+                                rows="1"
+                                required
+                            ></textarea>
+                            <button type="submit" class="send-btn" id="send-message-btn" aria-label="Send message">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                </section>
+ 
+                <!-- Code-to-Prompt Input Column (Left) -->
+                <section class="code-optimizer-container" id="code-optimizer-container" style="display: none;">
+                    <div class="optimizer-header">
+                        <h3>💻 Developer Prompt Compiler</h3>
+                        <p class="tab-info-text">Paste your source code below, select a optimization goal, and get an elite system prompt ready in the right panel.</p>
+                    </div>
+
+                    <div class="code-input-area">
+                        <label for="optimizer-code-input" class="setting-label">Your Source Code</label>
+                        <textarea id="optimizer-code-input" class="optimizer-textarea" placeholder="Paste your functions, classes, scripts, or queries here..."></textarea>
+                    </div>
+
+                    <div class="goal-selector-area">
+                        <label class="setting-label">Target Prompt Goal / Objective</label>
+                        <div class="goal-pills" id="goal-pills">
+                            <button class="goal-pill active" data-goal="debug">🐛 Debug & Fix</button>
+                            <button class="goal-pill" data-goal="optimize">⚡ Optimize Big-O</button>
+                            <button class="goal-pill" data-goal="tests">🧪 Write Unit Tests</button>
+                            <button class="goal-pill" data-goal="explain">📖 Explain Code</button>
+                            <button class="goal-pill" data-goal="refactor">🛠️ Refactor Architecture</button>
+                        </div>
+                    </div>
+
+                    <div class="extra-constraints-area">
+                        <label for="optimizer-extra-constraints" class="setting-label">Extra Constraints / Context (Optional)</label>
+                        <input type="text" id="optimizer-extra-constraints" class="setting-input" placeholder="e.g. Ensure thread safety, keep compatibility with Python 3.8, use docstrings...">
+                    </div>
+                </section>
+                </div>
+
+                <!-- Prompt Live Preview Column -->
+                <section class="preview-panel" id="preview-panel">
+                    <div class="panel-tabs">
+                        <button class="panel-tab active" data-tab="preview" id="tab-btn-preview">📋 Preview</button>
+                        <button class="panel-tab" data-tab="variables" id="tab-btn-variables">🧬 Variables <span class="tab-badge" id="vars-count">0</span></button>
+                        <button class="panel-tab" data-tab="sandbox" id="tab-btn-sandbox">⚡ Sandbox (AI)</button>
+                        <button class="panel-tab rewrite-tab-btn" data-tab="rewrite" id="tab-btn-rewrite">✨ Rewrite</button>
+                    </div>
+
+                    <!-- TAB 1: PREVIEW (Default) -->
+                    <div class="tab-content active" id="content-preview">
+                        <div class="preview-panel-header">
+                            <h3>📋 Compiled Prompt</h3>
+                            <div class="prompt-badge" id="prompt-badge">Drafting</div>
+                        </div>
+
+                        <!-- Prompt Builder Progress Meter -->
+                        <div class="criteria-checklist">
+                            <div class="criteria-item" id="crit-role">
+                                <span class="status-dot"></span>
+                                <span class="name">Persona (Role)</span>
+                            </div>
+                            <div class="criteria-item" id="crit-task">
+                                <span class="status-dot"></span>
+                                <span class="name">Objective (Task)</span>
+                            </div>
+                            <div class="criteria-item" id="crit-context">
+                                <span class="status-dot"></span>
+                                <span class="name">Context & Data</span>
+                            </div>
+                            <div class="criteria-item" id="crit-constraints">
+                                <span class="status-dot"></span>
+                                <span class="name">Constraints</span>
+                            </div>
+                            <div class="criteria-item" id="crit-format">
+                                <span class="status-dot"></span>
+                                <span class="name">Output Format</span>
+                            </div>
+                        </div>
+
+                        <!-- Textarea representing the live prompt -->
+                        <div class="prompt-output-container">
+                            <div class="prompt-output-scroll">
+                                <pre class="prompt-output-pre" id="prompt-output-pre"># System Persona
+[Not yet defined]
+
+# Objective
+[Not yet defined]
+
+# Context / Details
+[Not yet defined]
+
+# Constraints & Rules
+[Not yet defined]
+
+# Output Format
+[Not yet defined]</pre>
+                            </div>
+                        </div>
+
+                        <!-- Action Bar -->
+                        <div class="preview-actions">
+                            <button class="preview-action-btn primary" id="copy-prompt-btn">
+                                <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                <span class="btn-text">Copy Prompt</span>
+                            </button>
+                            <button class="preview-action-btn secondary" id="supercharge-btn" title="Refine and expand prompt with Gemini AI">
+                                <svg class="btn-icon glow-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                <span>Supercharge (AI)</span>
+                            </button>
+                            <button class="preview-action-btn secondary" id="evaluate-prompt-btn" title="Evaluate prompt criteria and get scorecard">
+                                <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                <span>Evaluate</span>
+                            </button>
+                            <button class="preview-action-btn tertiary" id="download-prompt-btn" title="Download as markdown file">
+                                <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            </button>
+                            <button class="preview-action-btn tertiary" id="save-prompt-btn" title="Save prompt to local library">
+                                <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: VARIABLES -->
+                    <div class="tab-content" id="content-variables">
+                        <div class="preview-panel-header">
+                            <h3>🧬 Prompt Variables</h3>
+                        </div>
+                        <p class="tab-info-text">Add double curly braces like <code>{{topic}}</code> in your answers to define placeholders. They will dynamically generate input fields below so you can fill them in before exporting!</p>
+                        <div class="variables-form-container" id="variables-form-container">
+                            <div class="empty-history">No variables detected in current prompt draft.</div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: PLAYGROUND SANDBOX -->
+                    <div class="tab-content" id="content-sandbox">
+                        <div class="preview-panel-header">
+                            <h3>⚡ AI Execution Sandbox</h3>
+                        </div>
+                        <p class="tab-info-text">Test your compiled prompt immediately! Enter a message below and run it (requires Gemini API key in Settings).</p>
+                        
+                        <div class="sandbox-container">
+                            <div class="sandbox-input-group">
+                                <label for="sandbox-user-message" class="setting-label">Test Input / User Query</label>
+                                <textarea id="sandbox-user-message" class="sandbox-textarea" placeholder="Type a message that you would send to your generated prompt persona..."></textarea>
+                            </div>
+                            <button class="sandbox-run-btn" id="sandbox-run-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                Run Sandbox Test
+                            </button>
+                            <div class="sandbox-output-group">
+                                <label class="setting-label" id="sandbox-output-label">Sandbox Response Output</label>
+                                <div class="sandbox-output-pre" id="sandbox-output-pre">
+                                    [Execute a test run to see response output]
+                                </div>
+                                <div class="sandbox-image-wrapper" id="sandbox-image-wrapper" style="display: none; flex-direction: column; gap: 12px; margin-top: 10px;">
+                                    <div class="sandbox-image-container" style="position: relative; width: 100%; border-radius: 10px; overflow: hidden; background: #04060b; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; min-height: 250px;">
+                                        <img src="" alt="Generated Visual Art" class="sandbox-generated-img" id="sandbox-generated-img" style="width: 100%; height: auto; display: none; object-fit: contain;">
+                                        <div class="sandbox-img-loader" id="sandbox-img-loader" style="display: none; flex-direction: column; align-items: center; gap: 12px; color: var(--text-secondary); padding: 20px;">
+                                            <svg class="typing-indicator" style="width: 32px; height: 32px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="31.4 31.4" transform="rotate(0)"><animateTransform attributeName="transform" type="rotate" values="0 12 12;360 12 12" dur="1s" repeatCount="indefinite"/></circle></svg>
+                                            <span style="font-size: 0.85rem; font-weight: 500;">Synthesizing visual components...</span>
+                                        </div>
+                                    </div>
+                                    <button class="preview-action-btn primary" id="download-sandbox-image-btn" style="width: 100%; justify-content: center; gap: 8px;">
+                                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                                        <span>Download Generated Image</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: PROMPT REWRITER -->
+                    <div class="tab-content" id="content-rewrite">
+                        <div class="preview-panel-header">
+                            <h3>✨ Prompt Rewriter</h3>
+                            <div class="prompt-badge rewrite-badge" id="rewrite-badge">AI Powered</div>
+                        </div>
+                        <p class="tab-info-text">Write any prompt in your own words — about any role, task, or idea — and Gemini will transform it into a professional, structured mega-prompt instantly.</p>
+
+                        <div class="rewriter-container">
+                            <!-- Input area -->
+                            <div class="rewriter-input-group">
+                                <label class="setting-label" for="rewriter-raw-input">Your Draft Prompt</label>
+                                <textarea
+                                    id="rewriter-raw-input"
+                                    class="rewriter-textarea"
+                                    placeholder="Write anything here in your own style... e.g.&#10;&#10;&quot;Act as a travel agent and help me plan a trip to Japan for 10 days on a budget. I want cultural experiences and good food.&quot;&#10;&#10;Gemini will transform this into a professional mega-prompt with role, objectives, context, constraints, and output format defined."
+                                ></textarea>
+                            </div>
+
+                            <!-- Tone & Style options -->
+                            <div class="rewriter-options">
+                                <div class="rewriter-option-group">
+                                    <label class="setting-label" for="rewriter-style">Rewrite Style</label>
+                                    <select id="rewriter-style" class="setting-input">
+                                        <option value="professional">🏢 Professional & Structured</option>
+                                        <option value="detailed">📚 Ultra-Detailed & Comprehensive</option>
+                                        <option value="concise">⚡ Concise & Direct</option>
+                                        <option value="creative">🎨 Creative & Engaging</option>
+                                        <option value="technical">🔧 Technical & Precise</option>
+                                    </select>
+                                </div>
+                                <div class="rewriter-option-group">
+                                    <label class="setting-label" for="rewriter-target">Target Platform</label>
+                                    <select id="rewriter-target" class="setting-input">
+                                        <option value="general">🤖 General AI (ChatGPT / Gemini)</option>
+                                        <option value="claude">🧠 Claude (Anthropic)</option>
+                                        <option value="midjourney">🎨 Midjourney / Image AI</option>
+                                        <option value="code">💻 GitHub Copilot / Code AI</option>
+                                        <option value="agent">⚙️ AI Agent / Automation</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Rewrite button -->
+                            <button class="rewriter-run-btn" id="rewriter-run-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                Rewrite with Gemini ✨
+                            </button>
+
+                            <!-- Output area -->
+                            <div class="rewriter-output-group" id="rewriter-output-group">
+                                <div class="rewriter-output-header">
+                                    <label class="setting-label">✅ Rewritten Mega-Prompt</label>
+                                    <button class="rewriter-copy-btn" id="rewriter-copy-btn" title="Copy rewritten prompt">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                        Copy
+                                    </button>
+                                    <button class="rewriter-send-btn" id="rewriter-send-to-preview-btn" title="Send to Preview tab">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                        Use as Prompt
+                                    </button>
+                                    <button class="rewriter-save-btn" id="rewriter-save-btn" title="Save to prompt library">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                        Save
+                                    </button>
+                                </div>
+                                <pre class="rewriter-output-pre" id="rewriter-output-pre">[Rewritten prompt will appear here after you click "Rewrite with Gemini"]</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Dialog Modal -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Settings & AI Settings</h3>
+                <button class="modal-close-btn" id="settings-close-btn" aria-label="Close settings">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label for="gemini-key-input" class="setting-label">Gemini API Key</label>
+                    <input type="password" id="gemini-key-input" class="setting-input" placeholder="AIzaSy...">
+                    <p class="setting-desc">To enable <strong>AI Supercharging</strong> and custom tweaking, paste your Google Gemini API key. Your key is stored client-side in your own browser's local storage and is never uploaded anywhere.</p>
+                </div>
+                <div class="setting-group">
+                    <label for="gemini-model-select" class="setting-label">Gemini Model</label>
+                    <select id="gemini-model-select" class="setting-input">
+                        <option value="gemini-2.5-flash">Gemini 2.5 Flash (Recommended - Super Fast)</option>
+                        <option value="gemini-2.5-pro">Gemini 2.5 Pro (Highly Intelligent)</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Theme Mode</label>
+                    <div class="theme-buttons">
+                        <button class="theme-btn active" id="theme-btn-dark">Deep Space (Dark)</button>
+                        <button class="theme-btn" id="theme-btn-light">Glass Light (Light)</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-action-btn secondary" id="settings-reset-btn">Reset Key</button>
+                <button class="modal-action-btn primary" id="settings-save-btn">Save Configurations</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scorecard Dialog Modal -->
+    <div class="modal-overlay" id="evaluator-modal">
+        <div class="modal-card evaluator-card">
+            <div class="modal-header">
+                <h3>📊 Prompt Quality Scorecard</h3>
+                <button class="modal-close-btn" id="evaluator-close-btn" aria-label="Close scorecard">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="score-summary-grid">
+                    <div class="score-circle-wrapper">
+                        <div class="score-circle" id="eval-score-circle">85</div>
+                        <div class="score-label">Overall Score</div>
+                    </div>
+                    <div class="score-grade-wrapper">
+                        <div class="score-grade" id="eval-score-grade">A-</div>
+                        <div class="score-label">Engineering Grade</div>
+                    </div>
+                </div>
+
+                <div class="eval-metrics-list">
+                    <div class="eval-metric-item">
+                        <div class="metric-info">
+                            <span class="metric-name">Role & Persona Specificity</span>
+                            <span class="metric-score" id="metric-score-role">90%</span>
+                        </div>
+                        <div class="metric-bar-bg">
+                            <div class="metric-bar-fill" id="metric-bar-role" style="width: 90%;"></div>
+                        </div>
+                    </div>
+                    <div class="eval-metric-item">
+                        <div class="metric-info">
+                            <span class="metric-name">Objective/Task Scope</span>
+                            <span class="metric-score" id="metric-score-task">80%</span>
+                        </div>
+                        <div class="metric-bar-bg">
+                            <div class="metric-bar-fill" id="metric-bar-task" style="width: 80%;"></div>
+                        </div>
+                    </div>
+                    <div class="eval-metric-item">
+                        <div class="metric-info">
+                            <span class="metric-name">Context & Data Depth</span>
+                            <span class="metric-score" id="metric-score-context">70%</span>
+                        </div>
+                        <div class="metric-bar-bg">
+                            <div class="metric-bar-fill" id="metric-bar-context" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                    <div class="eval-metric-item">
+                        <div class="metric-info">
+                            <span class="metric-name">Negative Constraints & Rules</span>
+                            <span class="metric-score" id="metric-score-constraints">85%</span>
+                        </div>
+                        <div class="metric-bar-bg">
+                            <div class="metric-bar-fill" id="metric-bar-constraints" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                    <div class="eval-metric-item">
+                        <div class="metric-info">
+                            <span class="metric-name">Formatting Rigor</span>
+                            <span class="metric-score" id="metric-score-format">95%</span>
+                        </div>
+                        <div class="metric-bar-bg">
+                            <div class="metric-bar-fill" id="metric-bar-format" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="eval-feedback-box">
+                    <h4 class="setting-label">📋 Engineering Feedback & Recommendations</h4>
+                    <div class="eval-feedback-content" id="eval-feedback-content">
+                        Loading evaluator suggestions...
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-action-btn primary" id="evaluator-close-action-btn">Close Scorecard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast-notification">Prompt copied to clipboard!</div>
+
+    <script src="app.js"></script>
+</body>
+</html>

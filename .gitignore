@@ -1,0 +1,5 @@
+node_modules/
+promptcraft.db
+*.db
+.env
+.DS_Store

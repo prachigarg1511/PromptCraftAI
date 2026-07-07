@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Access PromptCraft AI - Create an account or sign in to start compiling elite-level mega-prompts.">
+    <title>Sign In / Register | PromptCraft AI</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: radial-gradient(circle at 50% 50%, #0c1228 0%, #060913 100%) !important;
+            min-height: 100vh !important;
+            height: auto !important;
+            overflow-y: auto !important;
+            padding: 20px !important;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(13, 20, 38, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 35px 30px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(139, 92, 246, 0.05);
+            animation: card-appear 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes card-appear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .auth-tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .auth-tab-btn.active {
+            background: var(--grad-primary);
+            color: white;
+            box-shadow: 0 2px 10px rgba(139, 92, 246, 0.25);
+        }
+
+        .auth-form {
+            display: none;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .auth-form.active {
+            display: flex;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 0.92rem;
+            transition: var(--transition-smooth);
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.35);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+        }
+
+        .auth-submit-btn {
+            margin-top: 10px;
+            padding: 13px;
+            border-radius: 10px;
+            border: none;
+            background: var(--grad-primary);
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+        }
+
+        .auth-submit-btn:hover {
+            transform: translateY(-1px);
+            opacity: 0.95;
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .back-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#auth-logo-grad)"/>
+                <path d="M2 17L12 22L22 17" stroke="url(#auth-logo-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="url(#auth-logo-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs>
+                    <linearGradient id="auth-logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a855f7"/>
+                        <stop offset="1" stop-color="#06b6d4"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>PromptCraft <span class="accent-text">AI</span></span>
+        </div>
+
+        <div class="auth-tabs">
+            <button class="auth-tab-btn active" id="tab-login">Login</button>
+            <button class="auth-tab-btn" id="tab-register">Register</button>
+        </div>
+
+        <!-- ERROR & SUCCESS ALERTS -->
+        <div class="error-message" id="auth-error">
+            ⚠️ <span id="error-text">Incorrect login credentials</span>
+        </div>
+        <div class="success-message" id="auth-success">
+            ✅ <span id="success-text">Account created! Redirecting...</span>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form class="auth-form active" id="form-login">
+            <div class="form-group">
+                <label for="login-email" class="setting-label">Email Address</label>
+                <div class="form-input-wrapper">
+                    <input type="email" id="login-email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="login-password" class="setting-label">Password</label>
+                <div class="form-input-wrapper">
+                    <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+            </div>
+            <button type="submit" class="auth-submit-btn">Access Workspace</button>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form class="auth-form" id="form-register">
+            <div class="form-group">
+                <label for="reg-name" class="setting-label">Full Name</label>
+                <div class="form-input-wrapper">
+                    <input type="text" id="reg-name" class="form-input" placeholder="John Doe" required autocomplete="name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reg-email" class="setting-label">Email Address</label>
+                <div class="form-input-wrapper">
+                    <input type="email" id="reg-email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reg-password" class="setting-label">Password (Min. 6 chars)</label>
+                <div class="form-input-wrapper">
+                    <input type="password" id="reg-password" class="form-input" placeholder="••••••••" required minlength="6" autocomplete="new-password">
+                </div>
+            </div>
+            <button type="submit" class="auth-submit-btn">Create Developer Account</button>
+        </form>
+
+        <div class="back-link" style="margin-top: 15px; margin-bottom: -10px;">
+            Made by <strong style="color: var(--accent);">Prachi Garg</strong>
+        </div>
+        <div class="back-link">
+            Need help? Go back to <a href="index.html">Product Homepage</a>
+        </div>
+    </div>
+
+    <script>
+        // Auth management logic
+        const tabLogin = document.getElementById('tab-login');
+        const tabRegister = document.getElementById('tab-register');
+        const formLogin = document.getElementById('form-login');
+        const formRegister = document.getElementById('form-register');
+
+        const authError = document.getElementById('auth-error');
+        const errorText = document.getElementById('error-text');
+        const authSuccess = document.getElementById('auth-success');
+        const successText = document.getElementById('success-text');
+
+        // Toggle Tabs
+        tabLogin.addEventListener('click', () => {
+            tabLogin.classList.add('active');
+            tabRegister.classList.remove('active');
+            formLogin.classList.add('active');
+            formRegister.classList.remove('active');
+            hideAlerts();
+        });
+
+        tabRegister.addEventListener('click', () => {
+            tabRegister.classList.add('active');
+            tabLogin.classList.remove('active');
+            formRegister.classList.add('active');
+            formLogin.classList.remove('active');
+            hideAlerts();
+        });
+
+        function hideAlerts() {
+            authError.style.display = 'none';
+            authSuccess.style.display = 'none';
+        }
+
+        function showError(msg) {
+            hideAlerts();
+            errorText.textContent = msg;
+            authError.style.display = 'flex';
+        }
+
+        function showSuccess(msg) {
+            hideAlerts();
+            successText.textContent = msg;
+            authSuccess.style.display = 'flex';
+        }
+
+        // Login Handler
+        formLogin.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const password = document.getElementById('login-password').value;
+
+            hideAlerts();
+
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(data => { throw new Error(data.error || 'Login failed') });
+                }
+                return res.json();
+            })
+            .then(data => {
+                // Set session
+                localStorage.setItem('promptcraft_session', JSON.stringify({
+                    email: data.user.email,
+                    name: data.user.name,
+                    loginTime: Date.now()
+                }));
+                showSuccess("Sign-in successful! Redirecting to studio workspace...");
+                setTimeout(() => {
+                    window.location.href = 'app.html';
+                }, 1000);
+            })
+            .catch(err => {
+                showError(err.message);
+            });
+        });
+
+        // Register Handler
+        formRegister.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim().toLowerCase();
+            const password = document.getElementById('reg-password').value;
+
+            hideAlerts();
+
+            fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email, password })
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(data => { throw new Error(data.error || 'Registration failed') });
+                }
+                return res.json();
+            })
+            .then(data => {
+                // Log user in automatically
+                localStorage.setItem('promptcraft_session', JSON.stringify({
+                    email: data.user.email,
+                    name: data.user.name,
+                    loginTime: Date.now()
+                }));
+
+                showSuccess("Account created successfully! Preparing your studio workspace...");
+                setTimeout(() => {
+                    window.location.href = 'app.html';
+                }, 1200);
+            })
+            .catch(err => {
+                showError(err.message);
+            });
+        });
+
+        // Redirect logged-in users directly to app.html
+        (function checkSession() {
+            if (localStorage.getItem('promptcraft_session')) {
+                window.location.href = 'app.html';
+            }
+        })();
+    </script>
+</body>
+</html>

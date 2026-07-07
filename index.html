@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PromptCraft AI - The ultimate prompt engineering studio. Compose elite mega-prompts with conversational guides, code translation, variables, and sandbox execution.">
+    <title>PromptCraft AI | Professional Prompt Engineering Studio</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: block !important;
+            overflow-y: auto !important;
+            height: auto !important;
+            width: 100% !important;
+            background: radial-gradient(circle at top right, #0d152c 0%, #060913 60%) !important;
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-primary);
+        }
+
+        /* Navigation Header */
+        .landing-header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 10;
+        }
+
+        .landing-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .cta-nav-btn {
+            background: var(--grad-primary);
+            border: none;
+            color: white;
+            padding: 10px 22px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+        }
+
+        .cta-nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.45);
+        }
+
+        /* Hero Banner Section */
+        .hero-section {
+            max-width: 1200px;
+            margin: 60px auto 40px;
+            padding: 0 30px;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        .badge-hero {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: #c084fc;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 24px;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.4rem;
+            }
+        }
+
+        .hero-title span.gradient {
+            background: var(--grad-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            max-width: 760px;
+            margin: 0 auto 35px;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .hero-ctas {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .hero-btn-primary {
+            background: var(--grad-primary);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: var(--transition-bounce);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .hero-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+        }
+
+        .hero-btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 14px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        .hero-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--text-secondary);
+        }
+
+        /* Mock Workspace Preview Card */
+        .workspace-preview-wrapper {
+            max-width: 1100px;
+            margin: 60px auto 80px;
+            padding: 0 30px;
+        }
+
+        .workspace-preview-card {
+            background: rgba(13, 20, 38, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5), 0 0 40px rgba(6, 182, 212, 0.05);
+            padding: 24px;
+            backdrop-filter: blur(25px);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .workspace-preview-card {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mock-editor-area {
+            background: #04060b;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .mock-dot-indicators {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+
+        .mock-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .mock-dot.red { background: #ef4444; }
+        .mock-dot.yellow { background: #f59e0b; }
+        .mock-dot.green { background: #10b981; }
+
+        .mock-code-box {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: #818cf8;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        /* Features Section Grid */
+        .features-section {
+            max-width: 1200px;
+            margin: 0 auto 100px;
+            padding: 0 30px;
+        }
+
+        .section-headline {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 50px;
+        }
+
+        .section-headline span.gradient {
+            background: var(--grad-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: rgba(13, 20, 38, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 30px;
+            transition: var(--transition-bounce);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--grad-primary);
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(13, 20, 38, 0.45);
+            border-color: rgba(139, 92, 246, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 20px rgba(139, 92, 246, 0.05);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* FAQ Section Styles */
+        .faq-section {
+            max-width: 800px;
+            margin: 0 auto 100px;
+            padding: 0 30px;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .faq-item {
+            background: rgba(13, 20, 38, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+        }
+
+        .faq-item:hover {
+            border-color: rgba(139, 92, 246, 0.2);
+            background: rgba(13, 20, 38, 0.35);
+        }
+
+        /* Checkbox hack for accordion toggle without JS */
+        .faq-toggle {
+            display: none;
+        }
+
+        .faq-question {
+            padding: 22px 25px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            color: var(--text-primary);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .faq-answer-inner {
+            padding: 0 25px 22px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .faq-toggle:checked ~ .faq-answer {
+            max-height: 500px;
+            transition: max-height 0.4s ease-in-out;
+        }
+
+        /* Chevron Icon animation */
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: transform 0.3s ease;
+            font-weight: 300;
+        }
+
+        .faq-toggle:checked ~ .faq-question::after {
+            content: '−';
+            color: var(--primary);
+        }
+
+        /* Footer */
+        .landing-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px 30px;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body class="dark-theme">
+
+    <!-- Header Navigation -->
+    <header class="landing-header">
+        <div class="landing-logo">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#land-grad)"/>
+                <path d="M2 17L12 22L22 17" stroke="url(#land-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="url(#land-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs>
+                    <linearGradient id="land-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a855f7"/>
+                        <stop offset="1" stop-color="#06b6d4"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>PromptCraft <span class="accent-text">AI</span></span>
+        </div>
+        <a href="auth.html" class="cta-nav-btn">Launch Studio</a>
+    </header>
+
+    <!-- Hero Showcase Section -->
+    <section class="hero-section">
+        <div class="badge-hero">⚡ Elite prompt framework</div>
+        <h1 class="hero-title">Compose the Best of the Bestest <span class="gradient">Mega-Prompts</span></h1>
+        <p class="hero-desc">Transform raw concepts into detailed, structural system instructions. Optimize source code into engineering-grade LLM prompt templates, scan prompt metrics in real-time, and run sandbox test loops instantly.</p>
+        <div class="hero-ctas">
+            <a href="auth.html" class="hero-btn-primary">Enter Workspace Studio</a>
+            <a href="#features" class="hero-btn-secondary">Explore Studio Features</a>
+        </div>
+    </section>
+
+    <!-- Workspace Interface Preview -->
+    <section class="workspace-preview-wrapper">
+        <div class="workspace-preview-card">
+            <!-- Left Side: Interactive Code/Task Heuristics Mockup -->
+            <div class="mock-editor-area">
+                <div class="mock-dot-indicators">
+                    <span class="mock-dot red"></span>
+                    <span class="mock-dot yellow"></span>
+                    <span class="mock-dot green"></span>
+                </div>
+                <h4 class="section-title">💻 Source Code Inputs (Left Column)</h4>
+                <pre class="mock-code-box"><code>def optimize_payload(data):
+    # Live optimization objective compiler
+    if not data: return None
+    return { "status": "processed", "data": data }</code></pre>
+                <div class="goal-pills" style="margin-top: 10px;">
+                    <span class="goal-pill active" style="font-size: 0.75rem; padding: 4px 10px;">🐛 Debug Mode</span>
+                    <span class="goal-pill" style="font-size: 0.75rem; padding: 4px 10px; opacity: 0.6;">⚡ Optimize Big-O</span>
+                </div>
+            </div>
+
+            <!-- Right Side: Structured Compiled Template Preview Mockup -->
+            <div class="mock-editor-area" style="border-color: rgba(6, 182, 212, 0.25);">
+                <div class="mock-dot-indicators">
+                    <span class="mock-dot red" style="background:#06b6d4;"></span>
+                    <span class="mock-dot green" style="background:#10b981;"></span>
+                </div>
+                <h4 class="section-title" style="color:var(--accent);">📋 System Instructions Mega-Prompt (Right Column)</h4>
+                <pre class="mock-code-box" style="color:#10b981;"><code># 🤖 SYSTEM ROLE
+Act as a world-class Python debugging expert and senior software engineer with 15+ years of experience identifying and resolving complex software defects.
+
+# 🎯 PRIMARY OBJECTIVE
+Perform a comprehensive code audit on the provided Python code.</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Overview -->
+    <section class="features-section" id="features">
+        <h2 class="section-headline">Engineered for <span class="gradient">Ultimate Control</span></h2>
+        
+        <div class="features-grid">
+            <!-- Feature 1 -->
+            <div class="feature-card">
+                <span class="feature-icon">✍️</span>
+                <h3>Conversational Builder</h3>
+                <p>Guided chat experience gathers roles, objectives, background contexts, negative constraints, and few-shot formatting criteria step-by-step.</p>
+            </div>
+            <!-- Feature 2 -->
+            <div class="feature-card">
+                <span class="feature-icon">💻</span>
+                <h3>Code-to-Prompt Compiler</h3>
+                <p>Paste any programming function or database query, select an objective target (Debug, Optimize, JUnit Tests, Refactor, Explain), and compile it into a developer instruction prompt.</p>
+            </div>
+            <!-- Feature 3 -->
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <h3>Quality Scorecard</h3>
+                <p>Analyze compiled templates instantly using professional metrics (role specificity, constraints depth, formatting rigor) and receive an engineering grade (A-F).</p>
+            </div>
+            <!-- Feature 4 -->
+            <div class="feature-card">
+                <span class="feature-icon">🧬</span>
+                <h3>Placeholder Bindings</h3>
+                <p>Embed variables using double curly braces (e.g. <code>{{topic}}</code> or dropdown arrays). PromptCraft AI builds forms to input values before copying or downloading.</p>
+            </div>
+            <!-- Feature 5 -->
+            <div class="feature-card">
+                <span class="feature-icon">🧪</span>
+                <h3>Execution Sandbox</h3>
+                <p>Test your prompt drafts immediately inside the playground! Send queries to simulate model execution directly utilizing your Gemini API Key.</p>
+            </div>
+            <!-- Feature 6 -->
+            <div class="feature-card">
+                <span class="feature-icon">📁</span>
+                <h3>Preset Hub Database</h3>
+                <p>Boot workspaces instantly with pre-configured industry profiles like SEO Content Copywriters, Midjourney cinematic creators, or FastAPI architects.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Accordion Section -->
+    <section class="faq-section" id="faq">
+        <h2 class="section-headline">Frequently Asked <span class="gradient">Questions</span></h2>
+        
+        <div class="faq-list">
+            <!-- FAQ 1 -->
+            <div class="faq-item">
+                <input type="checkbox" id="faq-q1" class="faq-toggle">
+                <label for="faq-q1" class="faq-question">What is PromptCraft AI?</label>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        PromptCraft AI is an advanced prompt engineering studio designed to help developers and creators write elite-level system instructions. Instead of simple one-sentence commands, it builds detailed mega-prompts containing clear roles, target tasks, input variables, constraints, and custom output formatting.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="faq-item">
+                <input type="checkbox" id="faq-q2" class="faq-toggle">
+                <label for="faq-q2" class="faq-question">How does the Code-to-Prompt compiler work?</label>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        The compiler reads pasted source code, determines the programming language using heuristic filters, and generates specialized instruction templates. You can optimize for debugging code defects, improving Big-O space/time complexity, writing unit tests, explaining logic flows, or refactoring code architectures.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="faq-item">
+                <input type="checkbox" id="faq-q3" class="faq-toggle">
+                <label for="faq-q3" class="faq-question">Do I need an API key to use this platform?</label>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        No, the core prompt compilers, presets, custom placeholder templates, variables parser, and markdown exporter work entirely offline and for free. A Gemini API key is only required if you want to use the AI-assisted prompt supercharging or the execution test sandbox.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="faq-item">
+                <input type="checkbox" id="faq-q4" class="faq-toggle">
+                <label for="faq-q4" class="faq-question">Where are my keys, accounts, and prompts stored?</label>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Everything is stored locally in your browser's <code>localStorage</code> database. No passwords, prompts, source codes, or API credentials are ever sent to a remote server. Your privacy and data security are fully guaranteed.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+        <p>&copy; 2026 PromptCraft AI Studio. Made by Prachi Garg. All rights reserved. Securely processed client-side inside your own browser.</p>
+    </footer>
+
+    <script>
+        // Redirect to workspace if session is already active
+        (function() {
+            try {
+                if (localStorage.getItem('promptcraft_session')) {
+                    const btns = document.querySelectorAll('a[href="auth.html"]');
+                    btns.forEach(btn => {
+                        btn.setAttribute('href', 'app.html');
+                        btn.textContent = (btn.classList.contains('cta-nav-btn') || btn.classList.contains('hero-btn-primary')) ? 'Enter Studio' : btn.textContent;
+                    });
+                }
+            } catch(e) {}
+        })();
+    </script>
+</body>
+</html>

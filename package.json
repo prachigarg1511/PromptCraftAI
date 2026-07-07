@@ -1,0 +1,16 @@
+{
+  "name": "prompt-craft-ai",
+  "version": "1.0.0",
+  "description": "Professional Prompt Engineering Studio backed by a local SQLite database",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "sqlite3": "^5.1.7",
+    "bcryptjs": "^2.4.3"
+  },
+  "author": "",
+  "license": "ISC"
+}
