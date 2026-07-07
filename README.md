@@ -22,34 +22,59 @@ PromptCraft AI is an interactive, premium single-page web application designed t
 
 ## 🛠️ File Structure
 
-The project is lightweight, dependencies-free, and self-contained:
+The project is lightweight, structured, and modular:
+
 ```text
 PromptChatbot/
-├── index.html   # Main layout structure & UI controls
-├── style.css    # Premium glassmorphic styles, scrollbars, & animations
-├── app.js       # Conversation logic, state manager, API integrations, & storage
-└── README.md    # Product documentation & instructions
+├── index.html       # Landing page detailing product features and user reviews
+├── auth.html        # Glassmorphic user login & registration interface
+├── app.html         # Main dashboard layout housing workspace sections and controls
+├── app.js           # Core client logic (chatbot flows, prompt compilation, variables)
+├── server.js        # SQLite-backed Express web server for authentication storage
+├── style.css        # Core stylesheet containing premium layout structures and themes
+├── promptcraft.db   # Local SQLite database (auto-generated upon running)
+└── package.json     # Configuration file listing scripts and npm dependencies
 ```
+
+---
+
+## 💾 Database Schema
+
+When running the Node.js server, the system automatically initializes an SQLite database (`promptcraft.db`) with a secure hashing mechanism for developer accounts:
+
+* **Table: `users`**
+  * `id`: Integer (Auto-incrementing Primary Key)
+  * `name`: Text (Full name of user)
+  * `email`: Text (Unique, sanitized lowercase email index)
+  * `password`: Text (Securely hashed using `bcryptjs` with salt round of 10)
+  * `created_at`: Datetime (Defaults to current timestamp)
 
 ---
 
 ## 🚀 How to Run Locally
 
-Since the application is built entirely using vanilla frontend web technologies (HTML, CSS, and modern ES6 JavaScript), you do not need to install any heavy compiler, server, or npm database. 
+PromptCraft AI supports two modes of execution: a full-stack SQLite backed environment, or a standalone client-only mode.
 
-### Method 1: Direct File Launch
-Simply double-click the `index.html` file in your explorer directory or open it directly inside any web browser (Chrome, Edge, Firefox, or Safari).
+### Method 1: Full-Stack Dev Server (Recommended)
+To enable account creation and logging via the SQLite backend:
 
-### Method 2: SQLite-Backed Dev Server (Recommended)
-To run the full application with a local SQLite database for storing developer accounts, run:
-```bash
-# Install dependencies:
-npm install
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-# Start the server:
-npm start
-```
-Then navigate to `http://localhost:3000` in your browser.
+2. **Start the application server:**
+   ```bash
+   npm start
+   ```
+
+3. **Open browser:**
+   Navigate to `http://localhost:3000` to interact with the workspace.
+
+### Method 2: Client-Only/Offline Launch
+For immediate launch without the Express server setup:
+1. Double-click the `index.html` file in your system file explorer, or drag and drop it into any modern web browser.
+2. Note: Standalone client-side mode will bypass the SQLite login check and run completely in the browser sandbox.
 
 ---
 
@@ -62,3 +87,7 @@ The chatbot structures text and coding prompts based on the **CO-STAR** and **Ro
 3. **Context / Data**: The scenario information, audience background, or input documents the AI needs.
 4. **Constraints**: Formatting limits, word limits, tone, active/passive voice guidelines, and forbidden criteria.
 5. **Output Format**: Structuring output elements (e.g. *"Format the final summary as a markdown table with headers..."*).
+
+---
+
+*Made with 💜 by Prachi Garg.*
