@@ -1,8 +1,18 @@
-# PromptCraft AI 🚀
+# 🚀 PromptCraft AI
 
-> **🌐 Live Deployment Link:** [promptcraftaistudio.netlify.app](https://promptcraftaistudio.netlify.app/)
+<div align="center">
 
-PromptCraft AI is an interactive, premium prompt-engineering studio. It guides users through crafting high-performing LLM prompts using professional frameworks.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Netlify-00AD9F?style=for-the-badge&logo=netlify&logoColor=white)](https://promptcraftaistudio.netlify.app/)
+[![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org/)
+
+**PromptCraft AI is a professional, high-performance Prompt Engineering Studio built to compose elite mega-prompts with guided steps, real-time metric analysis, template variables, and an interactive Gemini execution sandbox.**
+
+[🌐 Launch App Live](https://promptcraftaistudio.netlify.app/) | [📘 Local Setup](#-how-to-run-locally) | [📄 View License](LICENSE)
+
+</div>
 
 ---
 
@@ -29,68 +39,77 @@ graph TD
 
 ## ✨ Features
 
-* **🤖 Conversational Chatbot**: Multi-step guides for structured objectives.
-* **📋 Live Split-Editor**: Real-time prompt compilation preview.
-* **⚡ Gemini Integration**: Supercharge or test drafts client-side.
-* **📊 Quality Scorecard**: Automated template metrics grading (A-F).
-* **🧬 Dynamic Variables**: Binds `{{placeholders}}` into inputs automatically.
-* **💾 Saved Library**: Store, edit, and load prompts locally.
-* **🌌 Cosmic Glassmorphism**: Responsive design with clean transitions.
+* **🤖 Conversational Chatbot**: Dynamic, guided conversation compiler using advanced prompt architectures.
+* **📋 Live Split-Editor**: Real-time side-by-side prompt compilation preview while typing.
+* **⚡ Gemini Integration**: Supercharge, expand, or run test simulations directly in the sandbox.
+* **📊 Quality Scorecard**: Automatic heuristic checking and grading (A-F) based on template structural criteria.
+* **🧬 Dynamic Variables**: Instantly detects and parses `{{placeholder_variables}}` into editable input fields.
+* **💾 Saved Presets Library**: Save, load, modify, and delete templates locally.
+* **🌌 Cosmic Glassmorphism**: Stunning premium dark-mode theme, micro-animations, and full responsive design.
 
 ---
 
 ## 🛠️ File Structure
 
-* [index.html](index.html) - Landing Showcase page.
-* [auth.html](auth.html) - Login/Register portal.
-* [app.html](app.html) - Workspace canvas.
-* [app.js](app.js) - App compilation & chatbot logic.
-* [server.js](server.js) - SQLite-backed Express REST API.
-* [style.css](style.css) - Premium visual design stylesheet.
-* [promptcraft.db](promptcraft.db) - Generated account database.
-* [package.json](package.json) - Application dependencies.
+| File | Description |
+| :--- | :--- |
+| 📄 [index.html](index.html) | Product landing/marketing showcase page. |
+| 🔑 [auth.html](auth.html) | Glassmorphic user login, register, and gatekeeper portal. |
+| 💻 [app.html](app.html) | Core application workspace canvas dashboard. |
+| ⚙️ [app.js](app.js) | Chatbot logic, score evaluation, variables parser, and Gemini integrations. |
+| 🛡️ [server.js](server.js) | Express.js authentication REST API backed by SQLite. |
+| 🎨 [style.css](style.css) | Core styles including glassmorphism rules, transitions, and layout resets. |
+| 🗃️ [promptcraft.db](promptcraft.db) | Local database storing developer accounts (auto-created). |
+| 📦 [package.json](package.json) | Package description, scripts, and server dependencies. |
 
 ---
 
 ## 💾 Database Schema (`users` Table)
 
-* `id` - Auto-increment Primary Key
-* `name` - Full Name
-* `email` - Sanitized unique email
-* `password` - Bcrypt-hashed string
-* `created_at` - Automatic timestamp
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| **`id`** | `INTEGER` | Primary Key (Auto-Increment) |
+| **`name`** | `TEXT` | User's full registration name |
+| **`email`** | `TEXT` | Unique, lowercase-normalized email index |
+| **`password`** | `TEXT` | Hashed password (using `bcryptjs` salt rounds=10) |
+| **`created_at`** | `DATETIME` | Time of sign-up (auto-generated) |
 
 ---
 
 ## 🚀 How to Run Locally
 
-### 1. Backend SQLite Mode (Recommended)
+### 1. Full-Stack SQLite Server Mode (Recommended)
+This mode enables the secure login page and saves developer accounts to the database.
 ```bash
 npm install
 npm start
 ```
-* Access at: `http://localhost:3000`
+* **Local Web Address:** `http://localhost:3000`
 
-### 2. Standalone Frontend Mode
-* Drag and drop `index.html` into your web browser.
-* Runs entirely offline utilizing browser `localStorage`.
+### 2. Standalone Offline Mode
+* Simply open `index.html` directly in any web browser.
+* Bypasses the login barrier and operates client-only using `localStorage`.
 
 ---
 
-## 🧠 Engineering Methodologies
+## 🧠 Prompt Engineering Best Practices
 
-PromptCraft AI uses structured formats inspired by **CO-STAR**:
-* **Role**: Defines the AI actor.
-* **Task**: Primary target action.
-* **Context**: Input details.
-* **Constraints**: Formatting limits.
-* **Format**: Structure requirements.
+PromptCraft AI templates are designed according to **CO-STAR** and expert-level instruction principles:
+
+| Methodology Block | Role / Purpose |
+| :--- | :--- |
+| **Role / Persona** | Sets the context or perspective for the AI (e.g. *Senior Python Developer*). |
+| **Objective / Task** | The specific goal or instruction the AI must perform. |
+| **Context** | Background information or source code data the AI requires. |
+| **Constraints** | Positive & negative boundaries (e.g. *do not use external imports*). |
+| **Format** | How the output should be structured (e.g. *markdown list, JSON, etc.*). |
 
 ---
 
 ## 📄 License
 
-Proprietary License. All rights reserved by Prachi Garg. Unauthorized copying, distribution, modification, or commercial exploitation of this Software or any of its files is strictly prohibited. Refer to the [LICENSE](LICENSE) file for the full terms.
+**Proprietary License**. All rights reserved by **Prachi Garg**.  
+Unauthorized copying, duplication, modification, or commercial exploitation of this Software or any of its files is strictly prohibited. Refer to the [LICENSE](LICENSE) file for the full legal terms.
 
 ---
 *Made with 💜 by Prachi Garg.*
